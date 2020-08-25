@@ -15,14 +15,14 @@ const morganOption = (NODE_ENV === 'production')
 app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
-app.use('/folders', foldersRouter)
+app.use('/folders', foldersRouter);
 
 app.get('/', (req, res) => {
   res.send('It\'s working :\'--)!');
 });
 
 app.use(function errorHandler(error, req, res, next) {
-  let response
+  let response;
   if (NODE_ENV === 'production') {
     response = { error: { message: 'server error '} };
   } else {

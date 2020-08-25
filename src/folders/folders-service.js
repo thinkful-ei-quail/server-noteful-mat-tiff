@@ -8,7 +8,7 @@ const FolderService = {
       .into('folders')
       .return('*')
       .then(row => {
-        return rows[0];
+        return row[0];
       });
   },
   getById(knex,id){
