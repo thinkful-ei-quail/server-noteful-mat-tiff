@@ -55,5 +55,39 @@ foldersRouter
           })
         }
         res.folder = folder
+        next()
       })
+      .catch(next)
   })
+  .get((req,res,next) => {
+    res.json(serializeFolders(res.folder))
+  })
+  .delete((req,res,next) => {
+    FolderService.deleteFolder(
+      req.app.get('db'),
+      req.params.folder_id
+    )
+      .then(numRowsAffected => {
+        res.status(204).end()
+      })
+      .catch(next)
+  })
+  .patch(jsonParser, (req,res,next) =>{
+    const{title} = req.body
+    const folderToUpdate = {title}
+    const numberOfValues = Object.values(folderToUpdate).filter(Boolean).length
+    if(numberOfValues === 0)
+      return res.status(400).json({
+        error:{ message:'Request body must contain a title' }
+      })
+    FolderService.updateFolder(
+      req.app.get('db'),
+      req.params.folder_id,
+      folderToUpdate
+    )
+      .then(numRowsAffected => {
+        res.status(204).end()
+      })
+      .catch(next)
+  })
+module.exports = foldersRouter
