@@ -3,9 +3,10 @@
 const path = require('path');
 const express = require('express');
 const xss = require('xss');
-const FolderService = require('./folders-service');
+const FoldersService = require('./folders-service');
 const foldersRouter = express.Router();
 const jsonParser = express.json();
+
 const serializeFolders = folder => ({
   id: folder.id,
   title: xss(folder.title)
@@ -15,22 +16,28 @@ foldersRouter
   .route('/')
   .get((req,res,next) => {
     const knexInstance = req.app.get('db');
-    FolderService.getAllFolders(knexInstance)
+    FoldersService.getAllFolders(knexInstance)
       .then(folders => {
         res.json(folders.map(serializeFolders))
       })
       .catch(next)
   })
+
   .post(jsonParser, (req,res,next) => {
     const {title} = req.body;
     const newFolder = {title};
-    for (const [key,value] of Object.entries(newFolder)){
-      if(value == null)
+
+    for (const [key, value] of Object.entries(newFolder)) {
+      if (value == null) {
         return res.status(400).json({
           error: {message: `Missing '${key}' in request body`}
-        });
+        })
+      }
     }
-    FolderService.insertFolders(
+
+    newFolder.title = title;
+
+    FoldersService.insertFolders(
       req.app.get('db'),
       newFolder
     )
@@ -42,10 +49,11 @@ foldersRouter
       })
       .catch(next)
   })
+
 foldersRouter
   .route('/:folder_id')
   .all((req,res,next) => {
-    FolderService.getById(
+    FoldersService.getById(
       req.app.get('db'),
       req.params.folder_id
     )
@@ -64,7 +72,7 @@ foldersRouter
     res.json(serializeFolders(res.folder))
   })
   .delete((req,res,next) => {
-    FolderService.deleteFolder(
+    FoldersService.deleteFolder(
       req.app.get('db'),
       req.params.folder_id
     )
@@ -81,7 +89,7 @@ foldersRouter
       return res.status(400).json({
         error:{ message:'Request body must contain a title' }
       })
-    FolderService.updateFolder(
+    FoldersService.updateFolder(
       req.app.get('db'),
       req.params.folder_id,
       folderToUpdate
