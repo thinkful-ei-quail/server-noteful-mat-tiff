@@ -7,25 +7,25 @@ const FoldersService = {
     return knex
       .insert(newFolder)
       .into('folders')
-      .return('*')
-      .then(row => {
-        return row[0];
+      .returning('*')
+      .then(rows => {
+        return rows[0];
       });
   },
 
-  getById(knex,id){
-    return knex.from('folders').select('*').where('id',id).first();
+  getById(knex, id){
+    return knex.from('folders').select('*').where('id', id).first();
   },
 
-  deleteFolder(knex,id){
+  deleteFolder(knex, id){
     return knex('folders')
-      .where({id})
+      .where({ id })
       .delete();
   },
 
-  updateFolder(knex,id,newTitle){
+  updateFolder(knex, id, newTitle){
     return knex('folders')
-      .where({id})
+      .where({ id })
       .update(newTitle);
   },
 };

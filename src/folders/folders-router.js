@@ -14,7 +14,7 @@ const serializeFolders = folder => ({
 
 foldersRouter
   .route('/')
-  .get((req,res,next) => {
+  .get((req, res, next) => {
     const knexInstance = req.app.get('db');
     FoldersService.getAllFolders(knexInstance)
       .then(folders => {
@@ -23,7 +23,7 @@ foldersRouter
       .catch(next)
   })
 
-  .post(jsonParser, (req,res,next) => {
+  .post(jsonParser, (req, res, next) => {
     const {title} = req.body;
     const newFolder = {title};
 
@@ -41,37 +41,37 @@ foldersRouter
       req.app.get('db'),
       newFolder
     )
-      .then(folder => {
-        res
+      .then(folders => {
+        return res
           .status(201)
-          .location(path.posix.join(req.originalUrl, `/${folder.id}`))
-          .json(serializeFolders(folder))
+          .location(path.posix.join(req.originalUrl, `/${folders.id}`))
+          .json(serializeFolders(folders))
       })
       .catch(next)
   })
 
 foldersRouter
   .route('/:folder_id')
-  .all((req,res,next) => {
+  .all((req, res, next) => {
     FoldersService.getById(
       req.app.get('db'),
       req.params.folder_id
     )
-      .then(folder => {
-        if(!folder) {
+      .then(folders => {
+        if(!folders) {
           return res.status(404).json({
             error: { message: 'Folder does not exist'}
           })
         }
-        res.folder = folder
+        res.folders = folders
         next()
       })
       .catch(next)
   })
-  .get((req,res,next) => {
-    res.json(serializeFolders(res.folder))
+  .get((req, res, next) => {
+    res.json(serializeFolders(res.folders))
   })
-  .delete((req,res,next) => {
+  .delete((req, res, next) => {
     FoldersService.deleteFolder(
       req.app.get('db'),
       req.params.folder_id
@@ -81,7 +81,7 @@ foldersRouter
       })
       .catch(next)
   })
-  .patch(jsonParser, (req,res,next) =>{
+  .patch(jsonParser, (req, res, next) =>{
     const{title} = req.body
     const folderToUpdate = {title}
     const numberOfValues = Object.values(folderToUpdate).filter(Boolean).length

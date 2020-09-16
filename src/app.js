@@ -16,6 +16,7 @@ const morganOption = (NODE_ENV === 'production')
 app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
+
 app.use('/folders', foldersRouter);
 app.use('/notes',notesRouter);
 
@@ -32,6 +33,7 @@ app.use(function errorHandler(error, req, res, next) {
     response = { message: error.message, error };
   }
   res.status(500).json(response);
+  next()
 });
 
 module.exports = app;
