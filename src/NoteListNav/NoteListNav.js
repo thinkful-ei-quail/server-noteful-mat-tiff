@@ -44,3 +44,4 @@ export default class NoteListNav extends React.Component {
     )
   }
 }
+
