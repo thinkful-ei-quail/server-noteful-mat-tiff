@@ -3,20 +3,12 @@ import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ApiContext from '../ApiContext'
-import PropTypes from 'prop-types'
 import config from '../config'
 import './Note.css'
 
 export default class Note extends React.Component {
   static defaultProps ={
     onDeleteNote: () => {},
-  }
-
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-    modified: PropTypes.string.isRequired,
-    onDeleteNote: PropTypes.func.isRequired
   }
 
   static contextType = ApiContext;
