@@ -11,13 +11,14 @@ const serializeNotes = note => ({
   id: note.id,
   title: xss(note.title),
   content: xss(note.content),
+  date_modified: note.date_modified,
+  folder_id:note.folder_id,
 });
 
 notesRouter
   .route('/')
   .get((req, res, next) => {
-    const db = req.app.get('db');
-    NotesService.getAllNotes(db)
+    NotesService.getAllNotes(req.app.get('db'))
       .then(notes => {
         res.json(notes.map(serializeNotes))
       })
@@ -25,8 +26,8 @@ notesRouter
   })
 
   .post(jsonParser, (req, res, next) => {
-    const {title, content} = req.body;
-    const newNote = {title, content};
+    const {title, content,folder_id} = req.body;
+    const newNote = {title, content,folder_id};
 
     for(const [key, value] of Object.entries(newNote)) {
       if (value == null) {
@@ -36,9 +37,6 @@ notesRouter
       }
     }
 
-    newNote.title = title;
-    newNote.content = content;
-
     NotesService.insertNote(
       req.app.get('db'),
       newNote
@@ -46,7 +44,7 @@ notesRouter
       .then(notes => {
         res 
           .status(201)
-          .location(path.posix.join('req.OriginalUrl', `/${notes.id}`))
+          .location(path.posix.join(req.OriginalUrl, `/${notes.id}`))
           .json(serializeNotes(notes))
       })
       .catch(next);
