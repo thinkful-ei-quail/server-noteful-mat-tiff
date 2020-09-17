@@ -6,14 +6,14 @@ import PropTypes from 'prop-types'
 import './NotePageMain.css'
 
 export default class NotePageMain extends React.Component {
-  static defaultProps = {
-    match: {
-      params: {}
-    }
-  }
+  static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.object.isRequired
+    }).isRequired
+  };
   static contextType = ApiContext
 
-  handleDeleteNote = noteId => {
+  handleDeleteNote = (noteId) => {
     this.props.history.push(`/`)
   }
 
@@ -38,10 +38,10 @@ export default class NotePageMain extends React.Component {
     )
   }
 }
-NotePageMain.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      noteId: PropTypes.string.isRequired
-    })
-  })
-}
+// NotePageMain.propTypes = {
+//   match: PropTypes.shape({
+//     params: PropTypes.shape({
+//       noteId: PropTypes.string.isRequired
+//     })
+//   })
+// }

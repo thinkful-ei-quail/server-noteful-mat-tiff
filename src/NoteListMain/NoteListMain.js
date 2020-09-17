@@ -10,10 +10,10 @@ import './NoteListMain.css'
 
 export default class NoteListMain extends React.Component {
   static defaultProps = {
-    match: {
-      params: {}
-    }
-  }
+    match: PropTypes.shape({
+      params:PropTypes.object.isRequired
+    })
+  };
   static contextType = ApiContext
 
   render() {
@@ -23,15 +23,17 @@ export default class NoteListMain extends React.Component {
     return (
       <section className='NoteListMain'>
         <ul>
-          {notesForFolder.map(note =>
-            <li key={note.id}>
-              <Note
-                id={note.id}
-                name={note.name}
-                modified={note.modified}
-              />
-            </li>
-          )}
+          {notesForFolder.map((note) => {
+            return (
+              <li key={note.id}>
+                <Note
+                  id={note.id}
+                  name={note.name}
+                  modified={note.modified}
+                />
+              </li>
+            );
+          })}
         </ul>
         <div className='NoteListMain__button-container'>
           <CircleButton
@@ -49,10 +51,10 @@ export default class NoteListMain extends React.Component {
     )
   }
 }
-NoteListMain.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      folderId: PropTypes.string
-    })
-  })
-}
+// NoteListMain.propTypes = {
+//   match: PropTypes.shape({
+//     params: PropTypes.shape({
+//       folderId: PropTypes.string
+//     })
+//   })
+// }

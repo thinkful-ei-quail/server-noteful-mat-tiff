@@ -1,9 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { format } from 'date-fns'
+// import { format } from 'date-fns'
+import moment from 'moment-timezone'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ApiContext from '../ApiContext'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import config from '../config'
 import './Note.css'
 
@@ -12,12 +13,12 @@ export default class Note extends React.Component {
     onDeleteNote: () => {},
   }
 
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-    modified: PropTypes.string.isRequired,
-    onDeleteNote: PropTypes.func.isRequired
-  }
+  // static propTypes = {
+  //   name: PropTypes.string.isRequired,
+  //   id: PropTypes.string.isRequired,
+  //   modified: PropTypes.string.isRequired,
+  //   onDeleteNote: PropTypes.func.isRequired
+  // }
 
   static contextType = ApiContext;
 
@@ -31,7 +32,7 @@ export default class Note extends React.Component {
         'content-type': 'application/json'
       },
     })
-      .then(res => {
+      .then((res) => {
         if (!res.ok)
           return res.json().then(e => Promise.reject(e))
         return res.json()
@@ -41,13 +42,16 @@ export default class Note extends React.Component {
         // allow parent to perform extra behaviour
         this.props.onDeleteNote(noteId)
       })
-      .catch(error => {
+      .catch((error) => {
         console.error({ error })
       })
   }
 
   render() {
     const { name, id, modified } = this.props
+    if(!id){
+      return null;
+    }
     return (
       <div className='Note'>
         <h2 className='Note__title'>
@@ -69,7 +73,7 @@ export default class Note extends React.Component {
             Modified
             {' '}
             <span className='Date'>
-              {format(modified, 'Do MMM YYYY')}
+              {moment(modified).format=('MM DD YYYY')}
             </span>
           </div>
         </div>

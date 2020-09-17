@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import NotefulForm from '../NotefulForm/NotefulForm'
 import ApiContext from '../ApiContext'
+//import {withRouter} from 'react-router-dom'
 import config from '../config'
 import './AddFolder.css'
 
@@ -12,28 +13,50 @@ export default class AddFolder extends Component {
   }
   static contextType = ApiContext;
 
+  constructor(props){
+    super(props);
+    this.state = {
+      name:{value:'',touched:false}
+    };
+  }
+
+  updateName(name){
+    this.setState({name:{value: name, touched: true}});
+  }
+
+  validateName(){
+    const {value, touched}  = this.state.name;
+    const {folders} = this.context;
+    return (
+      typeof value === 'string' &&
+      value.length > 0 &&
+      touched && 
+      !folders.find(
+        (folder) =>
+        folder.name && folder.name.toLowerCase() === value.toLowerCase()
+      )
+    );
+  }
+
   handleSubmit = e => {
     e.preventDefault()
-    const folder = {
-      name: e.target['folder-name'].value
-    }
-    fetch(`${config.API_ENDPOINT}/folders`, {
+    const newFolder = JSON.stringify({title:this.state.name.value});
+    const options = {
       method: 'POST',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify(folder),
-    })
-      .then(res => {
+      headers: {'Content-Type':'application/json'},
+      body: newFolder
+    };
+    fetch(`${config.API_ENDPOINT}/folders`, options)
+      .then((res) => {
         if (!res.ok)
           return res.json().then(e => Promise.reject(e))
-        return res.json()
+          return res.json()
       })
-      .then(folder => {
-        this.context.addFolder(folder)
-        this.props.history.push(`/folder/${folder.id}`)
+      .then((res) => {
+        this.context.addFolder(res)
+        this.props.history.push('/');
       })
-      .catch(error => {
+      .catch((error) => {
         console.error({ error })
       })
   }
@@ -50,7 +73,7 @@ export default class AddFolder extends Component {
             <input type='text' id='folder-name-input' name='folder-name' />
           </div>
           <div className='buttons'>
-            <button type='submit'>
+            <button disables={!this.validateName()} type='submit' className='submit-new-folder'>
               Add folder
             </button>
           </div>
@@ -59,3 +82,5 @@ export default class AddFolder extends Component {
     )
   }
 }
+
+// export default withRouter(AddFolder);

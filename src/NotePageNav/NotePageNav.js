@@ -7,14 +7,14 @@ import PropTypes from 'prop-types'
 import './NotePageNav.css'
 
 export default class NotePageNav extends React.Component {
-  static defaultProps = {
-    history: {
-      goBack: () => { }
-    },
-    match: {
-      params: {}
-    }
-  }
+  static propTypes = {
+    history: PropTypes.shape( {
+      goBack: PropTypes.func.isRequired
+    }),
+    match: PropTypes.shape({
+      params: PropTypes.object.isRequired
+    })
+  };
   static contextType = ApiContext;
 
   render() {
@@ -44,10 +44,10 @@ export default class NotePageNav extends React.Component {
   }
 }
 
-NotePageNav.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      noteId: PropTypes.string.isRequired
-    })
-  })
-}
+// NotePageNav.propTypes = {
+//   match: PropTypes.shape({
+//     params: PropTypes.shape({
+//       noteId: PropTypes.string.isRequired
+//     })
+//   })
+// }
