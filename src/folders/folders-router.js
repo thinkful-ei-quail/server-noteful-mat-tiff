@@ -15,14 +15,12 @@ const serializeFolders = folder => ({
 foldersRouter
   .route('/')
   .get((req, res, next) => {
-    const knexInstance = req.app.get('db');
-    FoldersService.getAllFolders(knexInstance)
+    FoldersService.getAllFolders(req.app.get('db'))
       .then(folders => {
         res.json(folders.map(serializeFolders))
       })
       .catch(next)
   })
-
   .post(jsonParser, (req, res, next) => {
     const {name} = req.body;
     const newFolder = {name};
@@ -34,18 +32,17 @@ foldersRouter
         })
       }
     }
-
     newFolder.name = name;
 
     FoldersService.insertFolders(
       req.app.get('db'),
       newFolder
     )
-      .then(folders => {
+      .then(folder => {
         return res
           .status(201)
-          .location(path.posix.join(req.originalUrl, `/${folders.id}`))
-          .json(serializeFolders(folders))
+          .location(path.posix.join(req.originalUrl, `/${folder.id}`))
+          .json(serializeFolders(folder))
       })
       .catch(next)
   })
@@ -57,13 +54,13 @@ foldersRouter
       req.app.get('db'),
       req.params.folder_id
     )
-      .then(folders => {
-        if(!folders) {
+      .then(folder => {
+        if(!folder) {
           return res.status(404).json({
-            error: { message: 'Folder does not exist'}
-          })
+            error: { message: 'Folder doesn\'t exist'}
+          });
         }
-        res.folders = folders
+        res.folder = folder
         next()
       })
       .catch(next)
