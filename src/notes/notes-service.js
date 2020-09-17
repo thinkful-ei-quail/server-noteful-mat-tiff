@@ -27,10 +27,10 @@ const NotesService = {
       .delete();
   },
   
-  updateNote(db, id, newTitle, newContent) {
+  updateNote(db, id, newName, newContent) {
     return db('notes')
       .where({ id })
-      .update(newTitle, newContent);
+      .update(newName, newContent);
   },
 };
   
