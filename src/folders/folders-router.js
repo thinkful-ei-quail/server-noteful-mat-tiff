@@ -9,7 +9,7 @@ const jsonParser = express.json();
 
 const serializeFolders = folder => ({
   id: folder.id,
-  title: xss(folder.title)
+  name: xss(folder.name)
 });
 
 foldersRouter
@@ -24,8 +24,8 @@ foldersRouter
   })
 
   .post(jsonParser, (req, res, next) => {
-    const {title} = req.body;
-    const newFolder = {title};
+    const {name} = req.body;
+    const newFolder = {name};
 
     for (const [key, value] of Object.entries(newFolder)) {
       if (value == null) {
@@ -34,8 +34,6 @@ foldersRouter
         })
       }
     }
-
-    newFolder.title = title;
 
     FoldersService.insertFolders(
       req.app.get('db'),
@@ -82,12 +80,12 @@ foldersRouter
       .catch(next)
   })
   .patch(jsonParser, (req, res, next) =>{
-    const{title} = req.body
-    const folderToUpdate = {title}
+    const{name} = req.body
+    const folderToUpdate = {name}
     const numberOfValues = Object.values(folderToUpdate).filter(Boolean).length
     if(numberOfValues === 0)
       return res.status(400).json({
-        error:{ message:'Request body must contain a title' }
+        error:{ message:'Request body must contain a name' }
       })
     FoldersService.updateFolder(
       req.app.get('db'),

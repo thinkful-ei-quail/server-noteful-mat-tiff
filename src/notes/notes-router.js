@@ -9,7 +9,7 @@ const jsonParser = express.json();
 
 const serializeNotes = note => ({
   id: note.id,
-  title: xss(note.title),
+  name: xss(note.name),
   content: xss(note.content),
 });
 
@@ -25,8 +25,8 @@ notesRouter
   })
 
   .post(jsonParser, (req, res, next) => {
-    const {title, content} = req.body;
-    const newNote = {title, content};
+    const {name, folderId, content} = req.body;
+    const newNote = {name, folderId, content};
 
     for(const [key, value] of Object.entries(newNote)) {
       if (value == null) {
@@ -36,9 +36,6 @@ notesRouter
       }
     }
 
-    newNote.title = title;
-    newNote.content = content;
-
     NotesService.insertNote(
       req.app.get('db'),
       newNote
@@ -46,7 +43,7 @@ notesRouter
       .then(notes => {
         res 
           .status(201)
-          .location(path.posix.join('req.OriginalUrl', `/${notes.id}`))
+          .location(path.posix.join(req.OriginalUrl, `/${notes.id}`))
           .json(serializeNotes(notes))
       })
       .catch(next);
@@ -84,14 +81,14 @@ notesRouter
       .catch(next)
   })
   .patch(jsonParser, (req, res, next) => {
-    const {title, content} = req.body;
-    const noteToUpdate = {title, content};
+    const {name, content} = req.body;
+    const noteToUpdate = {name, content};
 
     const numberOfValues = Object.values(noteToUpdate).filter(Boolean).length
     if (numberOfValues === 0)
       return res.status(400).json({
         error: {
-          message: 'Request body must contain \'Title\' or \'Content\''
+          message: 'Request body must contain \'name\' or \'Content\''
         }
       })
     NotesService.updateNote(

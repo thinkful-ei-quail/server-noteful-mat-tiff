@@ -23,10 +23,10 @@ const FoldersService = {
       .delete();
   },
 
-  updateFolder(knex, id, newTitle){
+  updateFolder(knex, id, newName){
     return knex('folders')
       .where({ id })
-      .update(newTitle);
+      .update(newName);
   },
 };
 
