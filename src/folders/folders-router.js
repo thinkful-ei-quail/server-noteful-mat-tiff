@@ -32,7 +32,6 @@ foldersRouter
         })
       }
     }
-    newFolder.name = name;
 
     FoldersService.insertFolders(
       req.app.get('db'),
