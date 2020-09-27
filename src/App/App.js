@@ -56,6 +56,8 @@ class App extends Component {
       notes: [
         ...this.state.notes,
         note
+
+        
       ]
     })
   }

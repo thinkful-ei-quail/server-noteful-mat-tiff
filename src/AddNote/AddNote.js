@@ -8,11 +8,11 @@ import CircleButton from '../CircleButton/CircleButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default class AddNote extends Component {
-  // static defaultProps = {
-  //   history: {
-  //     push: () => { }
-  //   },
-  // }
+  static defaultProps = {
+    history: {
+      push: () => { }
+    },
+  }
   static contextType = ApiContext;
   
   constructor(props){
@@ -117,7 +117,6 @@ export default class AddNote extends Component {
             {this.state.name.touched && !this.validateName() ? (
               <p>name is required</p>
             ) : null}
-            )}
           </div>
           <div className='field'>
             <label htmlFor='note-content-input'>

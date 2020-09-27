@@ -40,11 +40,12 @@ export default class AddFolder extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    const newFolder = JSON.stringify({title:this.state.name.value});
+    const newFolder = ({notes: this.state.name.value});
+    console.log('FOLDER VALUE', newFolder)
     const options = {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: newFolder
+      body: JSON.stringify(newFolder)
     };
     fetch(`${config.API_ENDPOINT}/folders`, options)
       .then((res) => {

@@ -8,11 +8,11 @@ import { getNotesForFolder } from '../notes-helpers'
 import './NoteListMain.css'
 
 export default class NoteListMain extends React.Component {
-  static defaultProps = {
-    match: PropTypes.shape({
-      params:PropTypes.object.isRequired
-    })
-  };
+  // static defaultProps = {
+  //   match: PropTypes.shape({
+  //     params:PropTypes.object.isRequired
+  //   })
+  // };
   static contextType = ApiContext
 
   render() {

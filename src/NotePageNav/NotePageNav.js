@@ -6,14 +6,14 @@ import { findNote, findFolder } from '../notes-helpers'
 import './NotePageNav.css'
 
 export default class NotePageNav extends React.Component {
-  static propTypes = {
-    history: PropTypes.shape( {
-      goBack: PropTypes.func.isRequired
-    }),
-    match: PropTypes.shape({
-      params: PropTypes.object.isRequired
-    })
-  };
+  // static propTypes = {
+  //   history: PropTypes.shape( {
+  //     goBack: PropTypes.func.isRequired
+  //   }),
+  //   match: PropTypes.shape({
+  //     params: PropTypes.object.isRequired
+  //   })
+  // };
   static contextType = ApiContext;
 
   render() {
