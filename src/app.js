@@ -18,7 +18,7 @@ app.use(helmet());
 app.use(cors());
 
 app.use('/folders', foldersRouter);
-app.use('/notes',notesRouter);
+app.use('/notes', notesRouter);
 
 app.get('/', (req, res) => {
   res.send('It\'s working :\'--)!');

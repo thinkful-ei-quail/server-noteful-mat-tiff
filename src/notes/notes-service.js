@@ -15,20 +15,20 @@ const NotesService = {
   
   getById(knex, id) {
     return knex
-      .from('notes')
       .select('*')
+      .from('notes')
       .where('id', id)
       .first();
   },
   
   deleteNote(knex, id) {
-    return db('notes')
-      .where({ id })
+    return knex('notes')
+      .where({id})
       .delete();
   },
   
-  updateNote(db, id, newName, newContent) {
-    return db('notes')
+  updateNote(knex, id, newName, newContent) {
+    return knex('notes')
       .where({ id })
       .update(newName, newContent);
   },
