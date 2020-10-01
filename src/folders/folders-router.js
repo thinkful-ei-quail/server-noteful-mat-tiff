@@ -59,7 +59,7 @@ foldersRouter
             error: { message: 'Folder doesn\'t exist'}
           });
         }
-        res.folder = folder
+        res.folders = folder
         next()
       })
       .catch(next)
