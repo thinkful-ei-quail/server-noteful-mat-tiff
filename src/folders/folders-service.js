@@ -14,7 +14,11 @@ const FoldersService = {
   },
 
   getById(knex, id){
-    return knex.from('folders').select('*').where('id', id).first();
+    return knex
+      .select('*')
+      .from('folders')
+      .where('id', id)
+      .first();
   },
 
   deleteFolder(knex, id){

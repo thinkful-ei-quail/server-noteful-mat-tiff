@@ -57,7 +57,10 @@ notesRouter
 notesRouter
   .route('/:note_id')
   .get((req, res, next) => {
-    NotesService.getById(req.app.get('db'), req.params.note_id)
+    NotesService.getById(
+      req.app.get('db'),
+      req.params.note_id
+    )
       .then(notes => {
         if(!notes) {
           return res.status(404).json({
@@ -66,7 +69,6 @@ notesRouter
         }
         res.notes = notes;
         next();
-        // res.json(serializeNotes(res.notes))
       })
       .catch(next);
   })
