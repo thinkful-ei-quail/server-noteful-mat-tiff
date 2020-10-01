@@ -21,7 +21,7 @@ notesRouter
   .get((req, res, next) => {
     NotesService.getAllNotes(req.app.get('db'))
       .then(notes => {
-        res.json(notes.map(serializeNotes))
+        res.json(notes.map(serializeNotes));
       })
       .catch(next);
   })
